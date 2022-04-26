@@ -14,8 +14,10 @@
             >
         </div>
 
-        <my-dialog v-model:show="visible">
-            <comments-form @createComment="createComment"></comments-form>
+        <my-dialog class="dialog" v-model:show="visible">
+            <div @click.stop class="dialog-content">
+                <comments-form @createComment="createComment"></comments-form>
+            </div>
         </my-dialog>
         <div>
             <div>
@@ -53,6 +55,7 @@ export default {
         },
         createComment(comment) {
             this.comments.push(comment);
+            this.visible = false;
             console.log(this.comments);
         },
     },
@@ -71,5 +74,22 @@ export default {
 
 .post-item {
     width: 700px;
+}
+.dialog {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    display: flex;
+}
+.dialog-content {
+    margin: auto;
+    background: white;
+    border-radius: 12px;
+    height: 230px;
+    width: 500px;
+    padding: 20px;
 }
 </style>

@@ -2,9 +2,7 @@
     <div class="comments" v-if="comments.length > 0">
         <h4>Коментарии:</h4>
         <div v-for="comment in comments" :key="comment.id" :comment="comment">
-            <strong
-                ><p>{{ comment.text }}</p></strong
-            >
+                <p>{{ comment.text }}</p>
         </div>
     </div>
     <div v-else>Нет коментариев</div>
@@ -24,7 +22,9 @@ export default {
 <style scoped>
 .comments {
     width: 700px;
-    border: solid grey 1px;
+    border-radius: 5px;
+    background-color: rgb(210, 250, 150);
     margin-top: 15px;
+    padding: 10px;
 }
 </style>

@@ -1,11 +1,9 @@
 <template>
-    <form @submit.prevent>
+    <form @submit.prevent="createComment">
         <h3>Написать коментарий</h3>
-        <!-- <textarea name="" id="" cols="30" rows="10" ></textarea> -->
-        <my-input v-model="comment.text" type="text"></my-input>
-        <post-button class="btn" @click="createComment"
-            >Сохранить</post-button
-        >
+        <textarea v-model="comment.text" type="text" cols="30" rows="7" ></textarea>
+        <!-- <my-input v-model="comment.text" type="text"></my-input> -->
+        <post-button class="btn" @click="createComment">Сохранить</post-button>
     </form>
 </template>
 
@@ -22,6 +20,7 @@ export default {
     methods: {
         createComment() {
             this.$emit("createComment", this.comment);
+            console.log(this.comment);
         },
     },
 };
