@@ -15,7 +15,13 @@
             <post-form @create="createPost" />
         </my-dialog>
 
-        <post-list v-if="!isPostsLoading" :posts="posts" @delete="deletePost" />
+        <post-list
+            v-if="!isPostsLoading"
+            :posts="posts"
+            @delete="deletePost"
+            @createComment="createComment"
+            @deleteComment="deleteComment"
+        />
         <div v-else>Идет загрузка...</div>
     </div>
 </template>
@@ -27,6 +33,7 @@ import MyDialog from "./components/UI/myDialog.vue";
 import PostButton from "./components/UI/postButton.vue";
 import mySelect from "./components/UI/mySelect.vue";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
     components: {
@@ -39,12 +46,7 @@ export default {
     data() {
         return {
             name: "",
-            posts: [
-                {
-                    title: "",
-                    body: "",
-                },
-            ],
+            posts: {},
             visible: false,
             isPostsLoading: false,
             selectedSort: "",
@@ -56,12 +58,20 @@ export default {
     },
     methods: {
         createPost(post) {
-            this.posts.push(post);
+            this.posts[post.id] = post;
             this.visible = false;
         },
         deletePost(post) {
-            this.posts = this.posts.filter((p) => p.id !== post.id);
+            delete this.posts[post.id];
         },
+
+        createComment(comment, post) {
+            this.posts[post.id].comments[comment.id] = comment;
+        },
+        deleteComment(comment, post) {
+            delete this.posts[post.id].comments[comment.id];
+        },
+
         showDialog() {
             this.visible = true;
         },
@@ -73,6 +83,15 @@ export default {
                     "https://jsonplaceholder.typicode.com/posts?_limit=10"
                 );
 
+                response.data = response.data.reduce((res, curr) => {
+                    delete curr.userId;
+                    curr.id = uuidv4();
+                    res[curr.id] = curr;
+                    res[curr.id]["comments"] = {};
+                    return res;
+                    // зачем здесь return если я просто перезаписываю response.data
+                    // и больше нигде этот res не использую
+                }, {});
                 this.posts = response.data;
             } catch (error) {
                 alert("Ошибка");

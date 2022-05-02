@@ -1,3 +1,4 @@
+
 <template>
     <form @submit.prevent>
         <h4>Создание поста</h4>
@@ -16,18 +17,20 @@
 </template>
 
 <script>
+import { v4 as uuidv4 } from 'uuid';
 export default {
     data() {
         return {
             post: {
                 title: "",
                 body: "",
+                comments: {},
             },
         };
     },
     methods: {
         createPost() {
-            this.post.id = Date.now();
+            this.post.id = uuidv4();
             this.$emit("create", this.post);
             this.post = {
                 title: "",

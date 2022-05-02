@@ -1,10 +1,15 @@
 <template>
     <div class="post">
-        <div class="post-item">
-            <div><strong> Название: </strong>{{ post.title }}</div>
-            <div><strong> Описание: </strong>{{ post.body }}</div>
+        <div class="left-side">
+            <div class="post-item">
+                <div><strong> Название: </strong>{{ post.title }}</div>
+                <div><strong> Описание: </strong>{{ post.body }}</div>
+            </div>
             <div>
-                <post-comments :comments="comments"></post-comments>
+                <post-comments
+                    @deleteComment="deleteComment"
+                    :comments="post.comments"
+                ></post-comments>
             </div>
         </div>
 
@@ -37,7 +42,7 @@ export default {
     data() {
         return {
             visible: false,
-            comments: [],
+            currentTime: new Date(),
         };
     },
     props: {
@@ -54,10 +59,16 @@ export default {
             this.visible = true;
         },
         createComment(comment) {
-            this.comments.push(comment);
+            let date = new Date();
+            comment["id"] = Math.floor(Math.random() * (1000 - 1));
+            comment["date"] = date.toLocaleString();
+            this.$emit("createComment", comment, this.post);
             this.visible = false;
-            console.log(this.comments);
+            console.log(this.post.comments);
         },
+        deleteComment(comment) {
+            this.$emit("deleteComment", comment, this.post);
+        }
     },
 };
 </script>
@@ -74,6 +85,10 @@ export default {
 
 .post-item {
     width: 700px;
+    border: 1px solid rgb(211, 211, 211);
+    border-radius: 5px;
+    background-color: rgb(194, 194, 194);
+    padding: 10px;
 }
 .dialog {
     top: 0;

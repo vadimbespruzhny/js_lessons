@@ -20,7 +20,6 @@ export default {
     methods: {
         createComment() {
             this.$emit("createComment", this.comment);
-            console.log(this.comment);
         },
     },
 };
