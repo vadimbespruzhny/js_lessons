@@ -9,6 +9,7 @@
             :key="comment.id"
             :comment="comment"
             @deleteComment="$emit('deleteComment', comment)"
+            @editComment="editComment"
         ></comment-item>
     </div>
     <div v-else></div>
@@ -24,6 +25,11 @@ export default {
             type: Object,
         },
     },
+    methods: {
+        editComment(newComment, comment) {
+            this.$emit("editComment", newComment, comment)
+        },
+    }
 };
 </script>
 

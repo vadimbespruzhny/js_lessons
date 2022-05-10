@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="posts-list">
         <div v-show="posts">
             <h3>Список постов</h3>
             <post-item
@@ -9,6 +9,7 @@
                 @delete="$emit('delete', post)"
                 @createComment="createComment"
                 @deleteComment="deleteComment"
+                @editComment="editComment"
             />
             <!-- почему для @createComment не работает emit в виде @delete="$emit('delete', post)",
              а нужно создавать отдельный метод? -->
@@ -35,14 +36,20 @@ export default {
         deleteComment(comment, post) {
             this.$emit("deleteComment", comment, post)
         },
+        editComment(newComment, comment, post) {
+            this.$emit("editComment", newComment, comment, post)
+        }
     },
 };
 </script>
 
 <style scoped>
+.posts-list {
+    margin-top: 25px;
+    width: 75%;
+}
 .post {
     margin-top: 15px;
     padding: 15px;
-    border: 2px solid gray;
 }
 </style>

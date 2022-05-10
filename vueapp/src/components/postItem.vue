@@ -8,23 +8,27 @@
             <div>
                 <post-comments
                     @deleteComment="deleteComment"
+                    @editComment="editComment"
                     :comments="post.comments"
                 ></post-comments>
             </div>
         </div>
 
-        <div class="app-buttons">
-            <post-button class="create-btn" @click="showDialog">
-                Написать коментарий</post-button
-            >
-        </div>
-
-        <my-dialog class="dialog" v-model:show="visible">
-            <div @click.stop class="dialog-content">
-                <comments-form @createComment="createComment"></comments-form>
+        <div class="right-side">
+            <div>
+                <post-button class="create-btn" @click="showDialog">
+                    Написать коментарий</post-button
+                >
             </div>
-        </my-dialog>
-        <div>
+
+            <my-dialog v-model:show="visible">
+                <div @click.stop class="dialog-content">
+                    <h3>Написать коментарий</h3>
+                    <comments-form
+                        @createComment="createComment"
+                    ></comments-form>
+                </div>
+            </my-dialog>
             <div>
                 <post-button class="btn" @click="deletePost"
                     >Удалить</post-button
@@ -64,11 +68,15 @@ export default {
             comment["date"] = date.toLocaleString();
             this.$emit("createComment", comment, this.post);
             this.visible = false;
-            console.log(this.post.comments);
         },
+        editComment(newComment, comment) {
+            // comment.text = newComment.text;
+            this.$emit("editComment", newComment, comment, this.post);
+        },
+
         deleteComment(comment) {
             this.$emit("deleteComment", comment, this.post);
-        }
+        },
     },
 };
 </script>
@@ -76,11 +84,8 @@ export default {
 <style scoped>
 .post {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    margin-top: 15px;
-    padding: 15px;
-    border: 2px solid gray;
+    border: 1px solid gray;
 }
 
 .post-item {
@@ -90,15 +95,7 @@ export default {
     background-color: rgb(194, 194, 194);
     padding: 10px;
 }
-.dialog {
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.5);
-    position: fixed;
-    display: flex;
-}
+
 .dialog-content {
     margin: auto;
     background: white;
@@ -106,5 +103,10 @@ export default {
     height: 230px;
     width: 500px;
     padding: 20px;
+}
+.right-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 </style>

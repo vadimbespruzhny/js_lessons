@@ -1,14 +1,16 @@
 <template>
     <div class="app">
-        <h1>Страница с постами</h1>
-        <div class="app-buttons">
-            <post-button class="create-btn" @click="showDialog"
-                >Создать пост</post-button
-            >
-            <my-select
-                :options="sortOptions"
-                v-model="selectedSort"
-            ></my-select>
+        <div class="header">
+            <h1>Страница с постами</h1>
+            <div class="app-buttons">
+                <post-button class="create-btn" @click="showDialog"
+                    >Создать пост</post-button
+                >
+                <my-select
+                    :options="sortOptions"
+                    v-model="selectedSort"
+                ></my-select>
+            </div>
         </div>
 
         <my-dialog v-model:show="visible">
@@ -21,6 +23,7 @@
             @delete="deletePost"
             @createComment="createComment"
             @deleteComment="deleteComment"
+            @editComment="editComment"
         />
         <div v-else>Идет загрузка...</div>
     </div>
@@ -67,6 +70,10 @@ export default {
 
         createComment(comment, post) {
             this.posts[post.id].comments[comment.id] = comment;
+        },
+        editComment(newComment, comment, post) {
+            this.posts[post.id].comments[comment.id].text = newComment.text;
+            // console.log(this.posts[post.id].comments[comment.id].text);
         },
         deleteComment(comment, post) {
             delete this.posts[post.id].comments[comment.id];
@@ -115,6 +122,13 @@ export default {
 
 .app {
     padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.header {
+    width: 100%;
+    border-bottom: 1px solid teal;
 }
 .app-buttons {
     display: flex;

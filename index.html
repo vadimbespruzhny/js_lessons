@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script> -->
+        <script src="./vue.js"></script>
+        <title>Document</title>
+    </head>
+    <body>
+        <div id="app">
+            {{ message }}
+            <a v-bind:[key]="message">link</a>
+            <div>{{ now }}</div>
+            <div>{{ reversed }}</div>
+            <div>----------------</div>
+            <div>
+                <ol>
+                    {{ fullName }}
+                </ol>
+            </div>
+            <button v-on:click="message = 'baz'">изменить</button>
+        </div>
+
+        <div id="app6">
+            <ol>
+                <todo-item
+                    v-for="item in groceryList"
+                    v-bind:item="item"
+                    v-bind:key="item.id"
+                ></todo-item>
+            </ol>
+        </div>
+        <script src="./lesson_1.js"></script>
+    </body>
+</html>
