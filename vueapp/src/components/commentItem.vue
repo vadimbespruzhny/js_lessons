@@ -5,17 +5,36 @@
                 <p>{{ comment.date }}</p>
             </div>
 
-            <div v-if="!onEdit" class="commentText">
+            <div v-if="!condition.onEdit" class="commentText">
                 <p>{{ comment.text }}</p>
+                <div
+                    class="commentAnswer"
+                    v-for="answer in comment.subComments"
+                    :key="answer.id"
+                >
+                    <p>{{ answer.text }}</p>
+                </div>
             </div>
-            <div v-else-if="onEdit">
+            <div v-if="condition.onEdit">
                 <p>{{ comment.text }}</p>
-                <edit-form @editComment="editComment"></edit-form>
+                <edit-form
+                    :condition="condition"
+                    @editComment="editComment"
+                ></edit-form>
+            </div>
+            <div v-if="condition.onAnswer">
+                <edit-form
+                    :condition="condition"
+                    @createCommentAnswer="createCommentAnswer"
+                ></edit-form>
             </div>
         </div>
 
         <div class="right-side">
-            <button class="edit-comment-button" @click="showEditDialog">
+            <button class="edit-comment-button" @click="showAnswerForm">
+                Ответить
+            </button>
+            <button class="edit-comment-button" @click="showEditForm">
                 Редактировать
             </button>
             <button class="delete-comment-button" @click="showDeleteDialog">
@@ -36,6 +55,7 @@
                             </div>
                             <div>
                                 <button class="no" @click="hideDialog">
+                                    <!-- @click="visible = false" -->
                                     НЕТ
                                 </button>
                             </div>
@@ -57,6 +77,11 @@ export default {
             visible: false,
             onDelete: false,
             onEdit: false,
+            onAnswer: false,
+            condition: {
+                onEdit: false,
+                onAnswer: false,
+            },
         };
     },
     props: {
@@ -68,22 +93,31 @@ export default {
         showDeleteDialog() {
             this.onDelete = true;
             this.visible = true;
-            console.log(this.comment);
         },
-        showEditDialog() {
-            this.onEdit = true;
+        showEditForm() {
+            this.condition.onEdit = true;
         },
+        showAnswerForm() {
+            this.condition.onAnswer = true;
+        },
+
         hideDialog() {
             this.visible = false;
         },
 
         deleteComment() {
-            this.$emit("deleteComment", this.comment);
+            this.$emit("deleteComment", this.comment.id);
         },
-        editComment(newComment) {
-            this.$emit("editComment", newComment, this.comment)
-            this.onEdit = false;
-        }
+
+        editComment(newCommentText) {
+            this.$emit("editComment", newCommentText, this.comment.id);
+            this.condition.onEdit = false;
+        },
+
+        createCommentAnswer(commentAnswerText) {
+            this.$emit("createCommentAnswer", commentAnswerText, this.comment.id);
+            this.condition.onAnswer = false;
+        },
     },
 };
 </script>
@@ -101,6 +135,9 @@ export default {
     flex-direction: column;
     max-width: 500px;
     overflow: hidden;
+}
+.commentAnswer {
+    margin-left: 25px;
 }
 
 .right-side {

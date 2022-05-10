@@ -8,8 +8,9 @@
             v-for="comment in comments"
             :key="comment.id"
             :comment="comment"
-            @deleteComment="$emit('deleteComment', comment)"
+            @deleteComment="$emit('deleteComment', comment.id)"
             @editComment="editComment"
+            @createCommentAnswer="createCommentAnswer"
         ></comment-item>
     </div>
     <div v-else></div>
@@ -26,8 +27,12 @@ export default {
         },
     },
     methods: {
-        editComment(newComment, comment) {
-            this.$emit("editComment", newComment, comment)
+        editComment(newCommentText, commentId) {
+            this.$emit("editComment", newCommentText, commentId)
+        },
+        
+        createCommentAnswer(commentAnswerText, commentId) {
+            this.$emit("createCommentAnswer", commentAnswerText, commentId)
         },
     }
 };

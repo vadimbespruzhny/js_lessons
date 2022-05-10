@@ -9,6 +9,7 @@
                 <post-comments
                     @deleteComment="deleteComment"
                     @editComment="editComment"
+                    @createCommentAnswer="createCommentAnswer"
                     :comments="post.comments"
                 ></post-comments>
             </div>
@@ -57,25 +58,43 @@ export default {
     },
     methods: {
         deletePost() {
-            this.$emit("delete", this.post);
+            this.$emit("delete", this.post.id);
         },
         showDialog() {
             this.visible = true;
         },
-        createComment(comment) {
-            let date = new Date();
-            comment["id"] = Math.floor(Math.random() * (1000 - 1));
-            comment["date"] = date.toLocaleString();
-            this.$emit("createComment", comment, this.post);
+        createComment(text) {
+            let currentDate = new Date().toLocaleString();
+            let comment = {
+                id: Math.floor(Math.random() * (1000 - 1)),
+                date: currentDate,
+                text: text,
+                subComments: {},
+            };
+            this.$emit("createComment", comment, this.post.id);
             this.visible = false;
         },
-        editComment(newComment, comment) {
-            // comment.text = newComment.text;
-            this.$emit("editComment", newComment, comment, this.post);
+        editComment(newCommentText, commentId) {
+            this.$emit("editComment", newCommentText, commentId, this.post.id);
         },
 
-        deleteComment(comment) {
-            this.$emit("deleteComment", comment, this.post);
+        deleteComment(commentId) {
+            this.$emit("deleteComment", commentId, this.post.id);
+        },
+
+        createCommentAnswer(commentAnswerText, commentId) {
+            let currentDate = new Date().toLocaleString();
+            let commentAnswer = {
+                id: Math.floor(Math.random() * (1000 - 1)),
+                date: currentDate,
+                text: commentAnswerText,
+            };
+            this.$emit(
+                "createCommentAnswer",
+                commentAnswer,
+                commentId,
+                this.post.id
+            );
         },
     },
 };

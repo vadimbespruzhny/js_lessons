@@ -24,6 +24,7 @@
             @createComment="createComment"
             @deleteComment="deleteComment"
             @editComment="editComment"
+            @createCommentAnswer="createCommentAnswer"
         />
         <div v-else>Идет загрузка...</div>
     </div>
@@ -64,19 +65,24 @@ export default {
             this.posts[post.id] = post;
             this.visible = false;
         },
-        deletePost(post) {
-            delete this.posts[post.id];
+        deletePost(postId) {
+            delete this.posts[postId];
         },
 
-        createComment(comment, post) {
-            this.posts[post.id].comments[comment.id] = comment;
+        createComment(comment, postId) {
+            this.posts[postId].comments[comment.id] = comment;
         },
-        editComment(newComment, comment, post) {
-            this.posts[post.id].comments[comment.id].text = newComment.text;
-            // console.log(this.posts[post.id].comments[comment.id].text);
+        editComment(newCommentText, commentId, postId) {
+            if (newCommentText) {
+                this.posts[postId].comments[commentId].text = newCommentText;
+            }
         },
-        deleteComment(comment, post) {
-            delete this.posts[post.id].comments[comment.id];
+        createCommentAnswer(commentAnswer, commentId, postId) {
+            this.posts[postId].comments[commentId].subComments[commentAnswer.id] = commentAnswer;
+        },
+
+        deleteComment(commentId, postId) {
+            delete this.posts[postId].comments[commentId];
         },
 
         showDialog() {
@@ -90,16 +96,14 @@ export default {
                     "https://jsonplaceholder.typicode.com/posts?_limit=10"
                 );
 
-                response.data = response.data.reduce((res, curr) => {
-                    delete curr.userId;
-                    curr.id = uuidv4();
-                    res[curr.id] = curr;
-                    res[curr.id]["comments"] = {};
-                    return res;
-                    // зачем здесь return если я просто перезаписываю response.data
-                    // и больше нигде этот res не использую
+                let data = response.data.reduce((acc, cur) => {
+                    delete cur.userId;
+                    cur.id = uuidv4();
+                    acc[cur.id] = cur;
+                    acc[cur.id]["comments"] = {};
+                    return acc;
                 }, {});
-                this.posts = response.data;
+                this.posts = data;
             } catch (error) {
                 alert("Ошибка");
             } finally {

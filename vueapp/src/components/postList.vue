@@ -6,10 +6,11 @@
                 v-for="post in posts"
                 :key="post.id"
                 :post="post"
-                @delete="$emit('delete', post)"
+                @delete="$emit('delete', post.id)"
                 @createComment="createComment"
                 @deleteComment="deleteComment"
                 @editComment="editComment"
+                @createCommentAnswer="createCommentAnswer"
             />
             <!-- почему для @createComment не работает emit в виде @delete="$emit('delete', post)",
              а нужно создавать отдельный метод? -->
@@ -30,15 +31,18 @@ export default {
         },
     },
     methods: {
-        createComment(comment, post) {
-            this.$emit("createComment", comment, post);
+        createComment(comment, postId) {
+            this.$emit("createComment", comment, postId);
         },
-        deleteComment(comment, post) {
-            this.$emit("deleteComment", comment, post)
+        deleteComment(commentId, postId) {
+            this.$emit("deleteComment", commentId, postId);
         },
-        editComment(newComment, comment, post) {
-            this.$emit("editComment", newComment, comment, post)
-        }
+        editComment(newCommentText, commentId, postId) {
+            this.$emit("editComment", newCommentText, commentId, postId);
+        },
+        createCommentAnswer(commentAnswer, commentId, postId) {
+            this.$emit("createCommentAnswer", commentAnswer, commentId, postId);
+        },
     },
 };
 </script>

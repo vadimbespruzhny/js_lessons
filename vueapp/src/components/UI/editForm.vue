@@ -7,9 +7,16 @@
                 cols="60"
                 rows="5"
             ></textarea>
-            <post-button class="btn" @click="editComment" @hideForm="hideForm"
-                >Редактировать</post-button
-            >
+            <div v-if="condition.onEdit">
+                <post-button class="btn" @click="editComment"
+                    >Редактировать</post-button
+                >
+            </div>
+            <div v-if="condition.onAnswer">
+                <post-button class="btn" @click="createCommentAnswer"
+                    >Сохранить</post-button
+                >
+            </div>
         </form>
     </div>
     <div v-else></div>
@@ -29,12 +36,18 @@ export default {
             },
         };
     },
+    props: {
+        condition: {
+            type: Object,
+        },
+    },
     methods: {
         editComment() {
-            this.$emit("editComment", this.comment);
+            this.$emit("editComment", this.comment.text);
             this.visible = false;
         },
-        hideForm() {
+        createCommentAnswer() {
+            this.$emit("createCommentAnswer", this.comment.text);
             this.visible = false;
         },
     },

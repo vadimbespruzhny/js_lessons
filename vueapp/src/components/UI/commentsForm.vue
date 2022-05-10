@@ -18,7 +18,7 @@ export default {
     },
     methods: {
         createComment() {
-            this.$emit("createComment", this.comment);
+            this.$emit("createComment", this.comment.text);
         },
     },
 };
