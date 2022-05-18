@@ -2,13 +2,15 @@
 <template>
     <form @submit.prevent>
         <h4>Создание поста</h4>
-        <my-input
-            v-model="post.title"
+        <input
+            :modelValue="post.title"
+            @input="post.title = $event.target.value"
             type="text"
             placeholder="Название"
         />
-        <my-input
-            v-model="post.body"
+        <input
+            :modelValue="post.body"
+            @input="post.body = $event.target.value"
             type="text"
             placeholder="Описание"
         />
@@ -18,6 +20,7 @@
 
 <script>
 import { v4 as uuidv4 } from 'uuid';
+import { mapMutations } from 'vuex';
 export default {
     data() {
         return {
@@ -29,9 +32,12 @@ export default {
         };
     },
     methods: {
+        ...mapMutations("post", {
+            createPostMutation: "createPostMutation",
+        }),
         createPost() {
             this.post.id = uuidv4();
-            this.$emit("create", this.post);
+            this.createPostMutation(this.post),
             this.post = {
                 title: "",
                 body: "",
@@ -45,5 +51,11 @@ export default {
 form {
     display: flex;
     flex-direction: column;
+}
+input {
+    width: 100%;
+    border: 2px solid gray;
+    padding: 10px 15px;
+    margin-top: 15px;
 }
 </style>

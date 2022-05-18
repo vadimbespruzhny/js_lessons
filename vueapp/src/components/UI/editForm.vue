@@ -1,21 +1,12 @@
 <template>
     <div v-if="visible">
         <form @submit.prevent="editComment">
-            <textarea
-                v-model="comment.text"
-                type="text"
-                cols="60"
-                rows="5"
-            ></textarea>
-            <div v-if="condition.onEdit">
-                <post-button class="btn" @click="editComment"
-                    >Редактировать</post-button
-                >
+            <textarea v-model="comment.text" type="text" cols="60" rows="5"></textarea>
+            <div v-if="condition.isEdit">
+                <post-button class="btn" @click="editComment">Редактировать</post-button>
             </div>
-            <div v-if="condition.onAnswer">
-                <post-button class="btn" @click="createCommentAnswer"
-                    >Сохранить</post-button
-                >
+            <div v-if="condition.isAnswer">
+                <post-button class="btn" @click="createCommentAnswer">Сохранить</post-button>
             </div>
         </form>
     </div>
