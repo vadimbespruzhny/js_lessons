@@ -4,7 +4,8 @@
             <h1>Страница с постами</h1>
             <div class="app-buttons">
                 <post-button class="create-btn" @click="visible = true">Создать пост</post-button>
-                <my-select :options="sortOptions" v-model="selectedSort"></my-select>
+                <my-select :options="sortOptions" v-model="selectedSort"></my-select> 
+                <!-- my-select можно сделать самозакрывающимся, как <img/> -->
             </div>
         </div>
 
