@@ -2,10 +2,10 @@
     <div v-if="visible">
         <form @submit.prevent="editComment">
             <textarea v-model="comment.text" type="text" cols="60" rows="5"></textarea>
-            <div v-if="condition.isEdit">
+            <div v-if="isEdit">
                 <post-button class="btn" @click="editComment">Редактировать</post-button>
             </div>
-            <div v-if="condition.isAnswer">
+            <div v-if="isAnswer">
                 <post-button class="btn" @click="createCommentAnswer">Сохранить</post-button>
             </div>
         </form>
@@ -28,9 +28,16 @@ export default {
         };
     },
     props: {
-        condition: {
-            type: Object,
+        isEdit: {
+            type: Boolean,
+            default: false,
+            required: false,
         },
+        isAnswer: {
+            type: Boolean,
+            default: false,
+            required: false,
+        }
     },
     methods: {
         editComment() {

@@ -36,8 +36,11 @@ export default {
             createPostMutation: "createPostMutation",
         }),
         createPost() {
-            this.post.id = uuidv4();
-            this.createPostMutation(this.post),
+            let fullPost = {};
+            this.post["id"] = uuidv4();
+            fullPost[this.post.id] = this.post;
+            fullPost = Object.entries(fullPost)[0];
+            this.createPostMutation(fullPost),
             this.post = {
                 title: "",
                 body: "",

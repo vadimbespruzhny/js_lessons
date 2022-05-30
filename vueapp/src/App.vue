@@ -4,12 +4,12 @@
             <h1>Страница с постами</h1>
             <div class="app-buttons">
                 <post-button class="create-btn" @click="visible = true">Создать пост</post-button>
-                <my-select :options="sortOptions" v-model="selectedSort"></my-select>
+                <my-select :options="sortOptions" v-model="selectedSort"/>
             </div>
         </div>
 
         <my-dialog v-model:show="visible">
-            <post-form @submit="visible = false" />
+            <post-form @submit="visible = false"/>
         </my-dialog>
 
         <post-list v-if="!isPostsLoading" :posts="postList"/>
@@ -23,7 +23,7 @@ import postList from "./components/postList.vue";
 import MyDialog from "./components/UI/myDialog.vue";
 import PostButton from "./components/UI/postButton.vue";
 import mySelect from "./components/UI/mySelect.vue";
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
     components: {
@@ -45,13 +45,10 @@ export default {
     },
     computed: {
         ...mapState({
-            posts: state => state.post.posts,
+            postList: state => state.post.posts,
             isPostsLoading: state => state.post.isPostsLoading,
             selectedSort: state => state.post.selectedSort,
             sortOptions: state => state.post.sortOptions,
-        }),
-        ...mapGetters("post", {
-            postList: "postList"
         }),
     },
     mounted() {
