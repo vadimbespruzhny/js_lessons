@@ -5,7 +5,7 @@
                 <p>{{ comment.date }}</p>
             </div>
 
-            <div v-if="!condition.onEdit" class="commentText">
+            <div v-if="!condition.isEdit" class="commentText">
                 <p>{{ comment.text }}</p>
                 <div
                     class="commentAnswer"
@@ -15,14 +15,14 @@
                     <p>{{ answer.text }}</p>
                 </div>
             </div>
-            <div v-if="condition.onEdit">
+            <div v-if="condition.isEdit">
                 <p>{{ comment.text }}</p>
                 <edit-form
                     :condition="condition"
                     @editComment="editComment"
                 ></edit-form>
             </div>
-            <div v-if="condition.onAnswer">
+            <div v-if="condition.isAnswer">
                 <edit-form
                     :condition="condition"
                     @createCommentAnswer="createCommentAnswer"
@@ -41,7 +41,7 @@
                 Удалить
             </button>
 
-            <div v-if="onDelete">
+            <div v-if="isDelete">
                 <my-dialog class="dialog" v-model:show="visible">
                     <div @click.stop class="dialog-content">
                         <div>
@@ -75,12 +75,10 @@ export default {
     data() {
         return {
             visible: false,
-            onDelete: false,
-            onEdit: false,
-            onAnswer: false,
+            isDelete: false,
             condition: {
-                onEdit: false,
-                onAnswer: false,
+                isEdit: false,
+                isAnswer: false,
             },
         };
     },
@@ -91,14 +89,14 @@ export default {
     },
     methods: {
         showDeleteDialog() {
-            this.onDelete = true;
+            this.isDelete = true;
             this.visible = true;
         },
         showEditForm() {
-            this.condition.onEdit = true;
+            this.condition.isEdit = true;
         },
         showAnswerForm() {
-            this.condition.onAnswer = true;
+            this.condition.isAnswer = true;
         },
 
         hideDialog() {
@@ -111,12 +109,12 @@ export default {
 
         editComment(newCommentText) {
             this.$emit("editComment", newCommentText, this.comment.id);
-            this.condition.onEdit = false;
+            this.condition.isEdit = false;
         },
 
         createCommentAnswer(commentAnswerText) {
             this.$emit("createCommentAnswer", commentAnswerText, this.comment.id);
-            this.condition.onAnswer = false;
+            this.condition.isAnswer = false;
         },
     },
 };

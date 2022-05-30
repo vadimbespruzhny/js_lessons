@@ -6,34 +6,26 @@
                 <div><strong> Описание: </strong>{{ post.body }}</div>
             </div>
             <div>
-                <post-comments
-                    @deleteComment="deleteComment"
-                    @editComment="editComment"
-                    @createCommentAnswer="createCommentAnswer"
-                    :comments="post.comments"
-                ></post-comments>
+                <post-comments @deleteComment="deleteComment" @editComment="editComment"
+                    @createCommentAnswer="createCommentAnswer" :comments="post.comments"></post-comments>
             </div>
         </div>
 
         <div class="right-side">
             <div>
                 <post-button class="create-btn" @click="showDialog">
-                    Написать коментарий</post-button
-                >
+                    Написать коментарий</post-button>
             </div>
 
             <my-dialog v-model:show="visible">
                 <div @click.stop class="dialog-content">
                     <h3>Написать коментарий</h3>
-                    <comments-form
-                        @createComment="createComment"
-                    ></comments-form>
+                    <comments-form @createComment="createComment">
+                    </comments-form>
                 </div>
             </my-dialog>
             <div>
-                <post-button class="btn" @click="deletePost"
-                    >Удалить</post-button
-                >
+                <post-button class="btn" @click="deletePostMutation(post.id)">Удалить</post-button>
             </div>
         </div>
     </div>
@@ -42,12 +34,13 @@
 <script>
 import postComments from "../components/postComments.vue";
 import commentsForm from "./UI/commentsForm.vue";
+import { mapMutations } from "vuex";
+
 export default {
     components: { postComments, commentsForm },
     data() {
         return {
             visible: false,
-            currentTime: new Date(),
         };
     },
     props: {
@@ -57,44 +50,59 @@ export default {
         },
     },
     methods: {
-        deletePost() {
-            this.$emit("delete", this.post.id);
-        },
+        ...mapMutations("post", {
+            deletePostMutation: "deletePostMutation",
+            createCommentMutation: "createCommentMutation",
+            editCommentMutation: "editCommentMutation",
+            deleteCommentMutation: "deleteCommentMutation",
+            createCommentAnswerMutation: "createCommentAnswerMutation",
+        }),
+
         showDialog() {
             this.visible = true;
         },
+
         createComment(text) {
-            let currentDate = new Date().toLocaleString();
-            let comment = {
-                id: Math.floor(Math.random() * (1000 - 1)),
-                date: currentDate,
-                text: text,
-                subComments: {},
+            let payload = {
+                comment: {
+                    id: Math.floor(Math.random() * (1000 - 1)),
+                    date: new Date().toLocaleString(),
+                    text: text,
+                    subComments: {},
+                },
+                postId: this.post.id,
             };
-            this.$emit("createComment", comment, this.post.id);
+            this.createCommentMutation(payload);
             this.visible = false;
         },
         editComment(newCommentText, commentId) {
-            this.$emit("editComment", newCommentText, commentId, this.post.id);
+            let payload = {
+                text: newCommentText,
+                commentId: commentId,
+                postId: this.post.id,
+            };
+            this.editCommentMutation(payload);
         },
 
         deleteComment(commentId) {
-            this.$emit("deleteComment", commentId, this.post.id);
+            let payload = {
+                commentId: commentId,
+                postId: this.post.id,
+            }
+            this.deleteCommentMutation(payload);
         },
 
         createCommentAnswer(commentAnswerText, commentId) {
-            let currentDate = new Date().toLocaleString();
-            let commentAnswer = {
-                id: Math.floor(Math.random() * (1000 - 1)),
-                date: currentDate,
-                text: commentAnswerText,
+            let payload = {
+                commentAnswer: {
+                    id: Math.floor(Math.random() * (1000 - 1)),
+                    date: new Date().toLocaleString(),
+                    text: commentAnswerText,
+                },
+                commentId: commentId,
+                postId: this.post.id,
             };
-            this.$emit(
-                "createCommentAnswer",
-                commentAnswer,
-                commentId,
-                this.post.id
-            );
+            this.createCommentAnswerMutation(payload);
         },
     },
 };
@@ -123,6 +131,7 @@ export default {
     width: 500px;
     padding: 20px;
 }
+
 .right-side {
     display: flex;
     flex-direction: column;

@@ -12,7 +12,7 @@ export default {
     props: {
         show: {
             type: Boolean,
-            dafault: false,
+            default: false,
         },
     },
     methods: {

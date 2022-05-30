@@ -8,8 +8,8 @@
             v-for="comment in comments"
             :key="comment.id"
             :comment="comment"
-            @deleteComment="$emit('deleteComment', comment.id)"
             @editComment="editComment"
+            @deleteComment="$emit('deleteComment', comment.id)"
             @createCommentAnswer="createCommentAnswer"
         ></comment-item>
     </div>

@@ -1,7 +1,6 @@
 <template>
     <form @submit.prevent="createComment">
         <textarea v-model="comment.text" type="text" cols="30" rows="7" ></textarea>
-        <!-- <my-input v-model="comment.text" type="text"></my-input> -->
         <post-button class="btn" @click="createComment">Сохранить</post-button>
     </form>
 </template>
