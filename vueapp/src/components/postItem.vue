@@ -91,7 +91,7 @@ export default {
         createCommentAnswer(commentAnswerText, commentId) {
             this.createCommentAnswerMutation({
                 commentAnswer: {
-                    id: Math.floor(Math.random() * (1000 - 1)),
+                    id: uuidv4(),
                     date: new Date().toLocaleString(),
                     text: commentAnswerText,
                 },

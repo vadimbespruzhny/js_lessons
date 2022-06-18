@@ -1,4 +1,3 @@
-
 <template>
     <form @submit.prevent>
         <h4>Создание поста</h4>
@@ -19,8 +18,8 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from 'uuid';
-import { mapMutations } from 'vuex';
+import { v4 as uuidv4 } from "uuid";
+import { mapMutations } from "vuex";
 export default {
     data() {
         return {
@@ -41,10 +40,10 @@ export default {
             fullPost[this.post.id] = this.post;
             fullPost = Object.entries(fullPost)[0];
             this.createPostMutation(fullPost),
-            this.post = {
-                title: "",
-                body: "",
-            };
+                (this.post = {
+                    title: "",
+                    body: "",
+                });
         },
     },
 };
@@ -60,5 +59,6 @@ input {
     border: 2px solid gray;
     padding: 10px 15px;
     margin-top: 15px;
+    outline: none;
 }
 </style>
