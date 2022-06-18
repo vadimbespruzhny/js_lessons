@@ -1,14 +1,16 @@
 <template>
     <div class="posts-list">
-        <div v-show="posts">
+        <div v-if="getPostsLength() > 0">
             <h3>Список постов</h3>
-            <post-item
-                v-for="post in posts"
-                :key="post.id"
-                :post="post"
-            />
+            <transition-group name="post-list">
+                <post-item
+                    v-for="post in posts"
+                    :key="post.id"
+                    :post="post"
+                />
+            </transition-group>
         </div>
-        <h2 v-show="!posts" style="color: red">Список постов пуст</h2>
+        <div v-else>Пока нет постов...</div>
     </div>
 </template>
 
@@ -18,6 +20,13 @@ import { mapState } from "vuex";
 
 export default {
     components: { postItem },
+    methods: {
+        getPostsLength() {
+            if (this.posts) {
+                return Object.keys(this.posts).length
+            }
+        }
+    },
     computed: {
         ...mapState({
             posts: state => state.post.posts
@@ -34,5 +43,20 @@ export default {
 .post {
     margin-top: 15px;
     padding: 15px;
+}
+.post-list-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+.post-list-enter-active,
+.post-list-leave-active {
+  transition: all 0.3s ease;
+}
+.post-list-enter-from,
+.post-list-leave-to {
+  opacity: 0;
+}
+.post-list-move {
+  transition: transform 0.4s ease;
 }
 </style>

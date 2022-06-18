@@ -1,8 +1,11 @@
 <template>
-    <select :value="modelValue" @change="changeOption">
+    <select
+        :value="selectedSort"
+        @change="this.$store.commit('post/setSelectedSort', $event.target.value)"
+    >
         <option disabled value="">Выберите из списка</option>
         <option
-            v-for="option in options"
+            v-for="option in sortOptions"
             :key="option.value"
             :value="option.value"
         >
@@ -12,20 +15,15 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
     name: "my-select",
-    props: {
-        modelValue: {
-            type: String,
-        },
-        options: {
-            type: Array,
-        },
-    },
-    methods: {
-        changeOption(event) {
-            this.$emit("update:modelValue", event.target.value);
-        },
+    computed: {
+        ...mapState({
+            sortOptions: (state) => state.post.sortOptions,
+            selectedSort: (state) => state.post.selectedSort,
+        }),
     },
 };
 </script>

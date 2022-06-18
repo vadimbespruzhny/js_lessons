@@ -7,21 +7,20 @@
             </div>
             <div>
                 <post-comments @deleteComment="deleteComment" @editComment="editComment"
-                    @createCommentAnswer="createCommentAnswer" :comments="post.comments"></post-comments>
+                    @createCommentAnswer="createCommentAnswer" :comments="post.comments"/>
             </div>
         </div>
 
         <div class="right-side">
             <div>
-                <post-button class="create-btn" @click="showDialog">
+                <post-button class="create-btn" @click="visible = true">
                     Написать коментарий</post-button>
             </div>
 
             <my-dialog v-model:show="visible">
                 <div @click.stop class="dialog-content">
                     <h3>Написать коментарий</h3>
-                    <comments-form @createComment="createComment">
-                    </comments-form>
+                    <comments-form @createComment="createComment"/>
                 </div>
             </my-dialog>
             <div>
@@ -34,6 +33,7 @@
 <script>
 import postComments from "../components/postComments.vue";
 import commentsForm from "./UI/commentsForm.vue";
+import { v4 as uuidv4 } from 'uuid';
 import { mapMutations } from "vuex";
 
 export default {
@@ -57,52 +57,47 @@ export default {
             deleteCommentMutation: "deleteCommentMutation",
             createCommentAnswerMutation: "createCommentAnswerMutation",
         }),
-
-        showDialog() {
-            this.visible = true;
-        },
-
+        
         createComment(text) {
-            let payload = {
-                comment: {
-                    id: Math.floor(Math.random() * (1000 - 1)),
-                    date: new Date().toLocaleString(),
-                    text: text,
-                    subComments: {},
-                },
-                postId: this.post.id,
+            const fullComment = {};
+            const comment = {
+                id: uuidv4(),
+                date: new Date().toLocaleString(),
+                text,
+                subComments: {},
             };
-            this.createCommentMutation(payload);
+            fullComment[comment.id] = comment;
+            fullComment["postId"] = this.post.id;
+            this.createCommentMutation(fullComment);
             this.visible = false;
         },
         editComment(newCommentText, commentId) {
-            let payload = {
+            this.editCommentMutation({
                 text: newCommentText,
-                commentId: commentId,
+                commentId,
                 postId: this.post.id,
-            };
-            this.editCommentMutation(payload);
+            });
         },
 
         deleteComment(commentId) {
-            let payload = {
+            this.deleteCommentMutation({
                 commentId: commentId,
                 postId: this.post.id,
-            }
-            this.deleteCommentMutation(payload);
+            });
+            // в компоненте не обязательно определять ...mapMutations, можно напярмую вызывать
+            // мутацю - this.$store.commit("post/deleteCommentMutation", payload)
         },
 
         createCommentAnswer(commentAnswerText, commentId) {
-            let payload = {
+            this.createCommentAnswerMutation({
                 commentAnswer: {
-                    id: Math.floor(Math.random() * (1000 - 1)),
+                    id: uuidv4(),
                     date: new Date().toLocaleString(),
                     text: commentAnswerText,
                 },
                 commentId: commentId,
                 postId: this.post.id,
-            };
-            this.createCommentAnswerMutation(payload);
+            });
         },
     },
 };

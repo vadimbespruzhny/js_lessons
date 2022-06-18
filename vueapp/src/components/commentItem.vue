@@ -5,28 +5,18 @@
                 <p>{{ comment.date }}</p>
             </div>
 
-            <div v-if="!condition.isEdit" class="commentText">
+            <div v-if="!isEdit" class="commentText">
                 <p>{{ comment.text }}</p>
-                <div
-                    class="commentAnswer"
-                    v-for="answer in comment.subComments"
-                    :key="answer.id"
-                >
+                <div class="commentAnswer" v-for="answer in comment.subComments" :key="answer.id">
                     <p>{{ answer.text }}</p>
                 </div>
             </div>
-            <div v-if="condition.isEdit">
+            <div v-if="isEdit">
                 <p>{{ comment.text }}</p>
-                <edit-form
-                    :condition="condition"
-                    @editComment="editComment"
-                ></edit-form>
+                <edit-form :isEdit="isEdit" @editComment="editComment"/>
             </div>
-            <div v-if="condition.isAnswer">
-                <edit-form
-                    :condition="condition"
-                    @createCommentAnswer="createCommentAnswer"
-                ></edit-form>
+            <div v-if="isAnswer">
+                <edit-form :isAnswer="isAnswer" @createCommentAnswer="createCommentAnswer"/>
             </div>
         </div>
 
@@ -54,8 +44,7 @@
                                 </button>
                             </div>
                             <div>
-                                <button class="no" @click="hideDialog">
-                                    <!-- @click="visible = false" -->
+                                <button class="no" @click="visible = false">
                                     НЕТ
                                 </button>
                             </div>
@@ -76,10 +65,9 @@ export default {
         return {
             visible: false,
             isDelete: false,
-            condition: {
-                isEdit: false,
-                isAnswer: false,
-            },
+            isEdit: false,
+            isAnswer: false,
+
         };
     },
     props: {
@@ -93,14 +81,10 @@ export default {
             this.visible = true;
         },
         showEditForm() {
-            this.condition.isEdit = true;
+            this.isEdit = true;
         },
         showAnswerForm() {
-            this.condition.isAnswer = true;
-        },
-
-        hideDialog() {
-            this.visible = false;
+            this.isAnswer = true;
         },
 
         deleteComment() {
@@ -109,12 +93,12 @@ export default {
 
         editComment(newCommentText) {
             this.$emit("editComment", newCommentText, this.comment.id);
-            this.condition.isEdit = false;
+            this.isEdit = false;
         },
 
         createCommentAnswer(commentAnswerText) {
             this.$emit("createCommentAnswer", commentAnswerText, this.comment.id);
-            this.condition.isAnswer = false;
+            this.isAnswer = false;
         },
     },
 };
@@ -128,12 +112,14 @@ export default {
     min-height: 25px;
     padding: 10px;
 }
+
 .left-side {
     display: flex;
     flex-direction: column;
     max-width: 500px;
     overflow: hidden;
 }
+
 .commentAnswer {
     margin-left: 25px;
 }
@@ -142,6 +128,7 @@ export default {
     display: flex;
     margin-top: 20px;
 }
+
 .delete-comment-button {
     display: flex;
     background-color: rgb(194, 194, 194);
@@ -167,17 +154,20 @@ export default {
 .delete-comment-button:hover {
     color: red;
 }
+
 .dialog-content {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
 .yes-or-no-buttons {
     margin-top: 25px;
     display: flex;
     width: 80%;
     justify-content: space-between;
 }
+
 .yes {
     background-color: rgb(251, 99, 99);
     height: 30px;
@@ -185,6 +175,7 @@ export default {
     border: none;
     outline: none;
 }
+
 .no {
     background-color: rgb(100, 255, 100);
     height: 30px;
