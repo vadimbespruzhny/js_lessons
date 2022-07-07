@@ -12,15 +12,23 @@ export default {
 
 <style scoped>
 .btn {
-    align-items: center;
-    padding: 10px 15px;
-    background-color:rgb(251, 99, 99);
-    border:none;
+    padding: 7px 12px;
+    background-color:rgb(212, 212, 212);
+    border: none;
+    border-radius: 3px;
+}
+.btn:hover {
+    background-color:rgb(186, 186, 186);
+
 }
 .create-btn {
-    background-color: rgb(100, 255, 100);
+    background-color: rgb(198, 199, 255);
     margin: 0 0 15px 0;
-    padding: 10px 16px;
+    padding: 7px 13px;
     border: none;
+    border-radius: 3px;
+}
+.create-btn:hover {
+    background-color: rgb(131, 133, 255);
 }
 </style>

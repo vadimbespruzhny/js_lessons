@@ -1,30 +1,56 @@
 <template>
     <div class="post">
         <div class="left-side">
-            <div class="post-item">
-                <div><strong> Название: </strong>{{ post.title }}</div>
-                <div><strong> Описание: </strong>{{ post.body }}</div>
-            </div>
+            <router-link
+                :to="{
+                    name: 'postItemPage',
+                    params: {
+                        id: post.id,
+                    },
+                }"
+            >
+                <div class="post-item">
+                    <div><strong> Название: </strong>{{ post.title }}</div>
+                    <div><strong> Описание: </strong>{{ post.body }}</div>
+                </div>
+            </router-link>
             <div>
-                <post-comments @deleteComment="deleteComment" @editComment="editComment"
-                    @createCommentAnswer="createCommentAnswer" :comments="post.comments"/>
+                <post-comments
+                    @deleteComment="deleteComment"
+                    @editComment="editComment"
+                    @createCommentAnswer="createCommentAnswer"
+                    :comments="post.comments"
+                />
             </div>
         </div>
 
         <div class="right-side">
+            <router-link
+                :to="{
+                    name: 'postItemPage',
+                    params: {
+                        id: post.id
+                    },
+                }"
+            >
+                <post-button class="create-btn">Открыть</post-button>
+            </router-link>
             <div>
                 <post-button class="create-btn" @click="visible = true">
-                    Написать коментарий</post-button>
+                    Написать коментарий</post-button
+                >
             </div>
 
             <my-dialog v-model:show="visible">
                 <div @click.stop class="dialog-content">
                     <h3>Написать коментарий</h3>
-                    <comments-form @createComment="createComment"/>
+                    <comments-form @createComment="createComment" />
                 </div>
             </my-dialog>
             <div>
-                <post-button class="btn" @click="deletePostMutation(post.id)">Удалить</post-button>
+                <post-button class="btn" @click="deletePostMutation(post.id)"
+                    >Удалить</post-button
+                >
             </div>
         </div>
     </div>
@@ -33,7 +59,7 @@
 <script>
 import postComments from "../components/postComments.vue";
 import commentsForm from "./UI/commentsForm.vue";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { mapMutations } from "vuex";
 
 export default {
@@ -57,7 +83,7 @@ export default {
             deleteCommentMutation: "deleteCommentMutation",
             createCommentAnswerMutation: "createCommentAnswerMutation",
         }),
-        
+
         createComment(text) {
             const fullComment = {};
             const comment = {
@@ -116,6 +142,10 @@ export default {
     border-radius: 5px;
     background-color: rgb(194, 194, 194);
     padding: 10px;
+}
+a {
+    text-decoration: none;
+    color: black;
 }
 
 .dialog-content {
