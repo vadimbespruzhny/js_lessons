@@ -35,18 +35,18 @@
                 <my-dialog class="dialog" v-model:show="visible">
                     <div @click.stop class="dialog-content">
                         <div>
-                            <h3>Вы уверены что хотите удалить</h3>
+                            <h3>Вы уверены что хотите удалить?</h3>
                         </div>
                         <div class="yes-or-no-buttons">
                             <div>
-                                <button class="yes" @click="deleteComment">
+                                <post-button class="create-btn" @click="deleteComment">
                                     ДА
-                                </button>
+                                </post-button>
                             </div>
                             <div>
-                                <button class="no" @click="visible = false">
+                                <post-button class="create-btn" @click="visible = false">
                                     НЕТ
-                                </button>
+                                </post-button>
                             </div>
                         </div>
                     </div>
@@ -81,10 +81,10 @@ export default {
             this.visible = true;
         },
         showEditForm() {
-            this.isEdit = true;
+            this.isEdit = !this.isEdit;
         },
         showAnswerForm() {
-            this.isAnswer = true;
+            this.isAnswer = !this.isAnswer;
         },
 
         deleteComment() {
@@ -165,22 +165,6 @@ export default {
     margin-top: 25px;
     display: flex;
     width: 80%;
-    justify-content: space-between;
-}
-
-.yes {
-    background-color: rgb(251, 99, 99);
-    height: 30px;
-    width: 100px;
-    border: none;
-    outline: none;
-}
-
-.no {
-    background-color: rgb(100, 255, 100);
-    height: 30px;
-    width: 100px;
-    border: none;
-    outline: none;
+    justify-content: space-around;
 }
 </style>
