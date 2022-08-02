@@ -1,7 +1,6 @@
 <template>
     <div class="posts-list">
-        <div v-if="getPostsLength() > 0">
-            <h3>Список постов</h3>
+        <div v-if="Object.keys(this.posts).length > 0">
             <transition-group name="post-list">
                 <post-item
                     v-for="post in posts"
@@ -20,13 +19,7 @@ import { mapState } from "vuex";
 
 export default {
     components: { postItem },
-    methods: {
-        getPostsLength() {
-            if (this.posts) {
-                return Object.keys(this.posts).length
-            }
-        }
-    },
+    methods: {},
     computed: {
         ...mapState({
             posts: state => state.post.posts
